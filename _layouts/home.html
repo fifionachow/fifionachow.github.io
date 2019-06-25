@@ -10,8 +10,9 @@ title: Home
 <h2>Hello!</h2>
 <p>My name is Fiona Chow. I'm a Data Engineer/Data Scientist based in Glasgow, Scotland. Welcome.
 </p>
-</section> -->
+</section>
 
+<section>
 {% for post in paginator.posts %}
 {% if (post.featured) %}
 <article>
@@ -23,6 +24,7 @@ title: Home
 </article>
 {% endif %}
 {% endfor %}
+</section>
 
 <!-- Pagination links -->
 <div class="pagination">
