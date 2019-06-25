@@ -4,25 +4,26 @@ title: Home
 ---
 
 <section>
-<p>
-    <img src="/assets/img/sushi-avatar.jpg" alt="Fiona Chow's Picture"/>
-</p>
-<h2>Hello!</h2>
-<p>My name is Fiona Chow. I'm a Data Engineer/Data Scientist based in Glasgow, Scotland. Welcome.
-</p>
+    <div class="wrap">
+<!-- <p>
+    <img src="{{ site.github.url }}/assets/img/sushi-avatar.jpg" alt="Fiona Chow's Picture" align="middle"/>
+</p> -->
+        <h1>Fiona Chow</h1>
+        <p>I'm a Data Engineer/Data Scientist based in Glasgow, Scotland.</p>
+    </div>
 </section>
 
-<section>
-{% for post in paginator.posts %}
-{% if (post.featured) %}
-<article>
-  <a href="{{ site.github.url }}{{ post.url }}">
-    <div class="featured-posts" {% if post.image %}style="background-image:url({{ site.github.url }}/assets/img/{{ post.image }})"{% endif %}>
-      <h2><span>{{ post.title }}</span></h2>
-    </div>
-  </a>
-</article>
-{% endif %}
+<section class="portfolio">
+    {% for post in paginator.posts %}
+        {% if (post.featured) %}
+            <article>
+              <a href="{{ site.github.url }}{{ post.url }}">
+                <div class="featured-posts" {% if post.image %}style="background-image:url({{ site.github.url }}/assets/img/{{ post.image }})"{% endif %}>
+                  <h2><span>{{ post.title }}</span></h2>
+                </div>
+              </a>
+            </article>
+        {% endif %}
 {% endfor %}
 </section>
 
