@@ -5,7 +5,7 @@ author: "Paul Le"
 categories: documentation
 tags: [documentation,sample]
 image: city-2.jpg
-featured: False
+featured: no
 ---
 
 # Millennial
