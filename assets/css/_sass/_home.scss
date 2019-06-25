@@ -1,7 +1,21 @@
+.intro {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.intro p {
+  font-size: small;
+  color: #808080;
+}
+
 .wrap {
   position: relative;
   margin: 0 auto;
   padding: 0 30px;
+}
+
+.portfolio {
+  margin-top: 50px;
 }
 
 .featured-posts {
