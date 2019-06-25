@@ -5,7 +5,7 @@ author: "Paul Le"
 categories: article
 tags: [article]
 image: arctic-1.jpg
-featured: false
+featured: False
 ---
 
 # Markdown Support
