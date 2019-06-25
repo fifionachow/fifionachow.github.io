@@ -2,9 +2,10 @@
 layout: post
 title: "Text Formatting"
 author: "Paul Le"
-categories: sample
+categories: article
 tags: [article]
 image: arctic-1.jpg
+featured: false
 ---
 
 # Markdown Support
