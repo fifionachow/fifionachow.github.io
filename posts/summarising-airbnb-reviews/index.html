@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Fiona Chow">
+    <meta name="description" content="My learning journey">
+    <meta name="keywords" content="blog,datascientist,personal,learning">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Using ML for holiday planning: Summarising Airbnb reviews"/>
+<meta name="twitter:description" content="Using ML for holiday planning: Summarising Airbnb reviews Photo by Arno Smit on UnsplashWhen it comes to holiday accommodation, Airbnb is the first avenue that immediately comes to mind.
+With the popularity of Airbnb, there are thousands of Airbnb places available at most major cities in the world. Even after filtering by the number of people, Airbnb property types, and date of check-in and out, we’re still left with plenty to choose from."/>
+
+    <meta property="og:title" content="Using ML for holiday planning: Summarising Airbnb reviews" />
+<meta property="og:description" content="Using ML for holiday planning: Summarising Airbnb reviews Photo by Arno Smit on UnsplashWhen it comes to holiday accommodation, Airbnb is the first avenue that immediately comes to mind.
+With the popularity of Airbnb, there are thousands of Airbnb places available at most major cities in the world. Even after filtering by the number of people, Airbnb property types, and date of check-in and out, we’re still left with plenty to choose from." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fifionachow.github.io/posts/summarising-airbnb-reviews/" />
+<meta property="article:published_time" content="2019-07-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-03T00:00:00+00:00" />
+
+
+
+    
+      <base href="https://fifionachow.github.io/posts/summarising-airbnb-reviews/">
+    
+    <title>
+  Using ML for holiday planning: Summarising Airbnb reviews · Fiona Chow
+</title>
+
+    
+      <link rel="canonical" href="https://fifionachow.github.io/posts/summarising-airbnb-reviews/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://fifionachow.github.io/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://fifionachow.github.io/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.66.0" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Fiona Chow
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://fifionachow.github.io/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://fifionachow.github.io/about/">About</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Using ML for holiday planning: Summarising Airbnb reviews</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2019-07-03T00:00:00Z'>
+                July 3, 2019
+              </time>
+            </span>
+            <span class="reading-time">
+              <i class="fas fa-clock"></i>
+              10-minute read
+            </span>
+          </div>
+          
+          
+        </div>
+      </header>
+
+      <div>
+        
+        <h1 id="using-ml-for-holiday-planning-summarising-airbnb-reviews">Using ML for holiday planning: Summarising Airbnb reviews</h1>
+<p><img src="https://miro.medium.com/max/9792/1*XKmsc29ApJDeWS4tetidyQ.jpeg" alt="">
+<!-- raw HTML omitted --> Photo by <a href="https://unsplash.com/@_entreprenerd?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Arno Smit</a> on <a href="https://unsplash.com/search/photos/beach?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a><!-- raw HTML omitted --></p>
+<p>When it comes to holiday accommodation, Airbnb is the first avenue that immediately comes to mind.</p>
+<p>With the popularity of Airbnb, there are thousands of Airbnb places available at most major cities in the world. Even after filtering by the number of people, Airbnb property types, and date of check-in and out, we’re still left with plenty to choose from.</p>
+<p>When choosing an Airbnb, apart from the obvious requirements — price, location, and amenities, I tend to spend time reading through guest reviews to understand more about the host and the experience I can expect while staying there. The only problem is that this manual effort can be very time-consuming!</p>
+<h1 id="there-has-to-be-a-better-way">There has to be a better way!</h1>
+<blockquote>
+<p>“How can I get a concise understanding of prior guests experience without having to read through pages of reviews?”</p>
+</blockquote>
+<p>I wasn’t only interested in knowing whether most reviews were positive. I was also interested in knowing what most guests have said about their experience.</p>
+<p>With my problem framed, I decided to approach the problem in 3 different ways — Topic Modelling, relevant keyword extraction using TF-IDF (<strong>T</strong>erm <strong>F</strong>requency — <strong>I</strong>nverse <strong>D</strong>ocument <strong>F</strong>requency) and Text Summarisation.</p>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#data"><strong>Data</strong></a></li>
+<li><a href="#lets-discuss-approaches"><strong>Let’s discuss approaches</strong></a>
+<ul>
+<li><a href="#1.-topic-modelling">1. Topic Modelling</a></li>
+<li><a href="#2.-tf-idf">2. TF-IDF</a></li>
+<li><a href="#3.-text-summarisation">3. Text Summarisation</a></li>
+</ul>
+</li>
+<li><a href="#extraction-in-action-(how-have-i-used-it-for-my-holiday?)"><strong>Extraction In Action (How have I used it for my holiday?)</strong></a></li>
+<li><a href="#the-end"><strong>The End</strong></a></li>
+</ul>
+<h1 id="data">Data</h1>
+<p>I have used Amsterdam Airbnb reviews sourced from <a href="http://insideairbnb.com/get-the-data.html">InsideAirbnb</a>. Over the last 10 years, 450,000 reviews were submitted by guests on their stay in Amsterdam for 15,000 listings.</p>
+<p><strong><em>Preprocessing</em></strong></p>
+<p><a href="https://amsterdam.org/en/facts-and-figures.php">An average of 4.4mil foreign tourists visits Amsterdam every year.</a> So we can expect a portion of reviews to be written in a language other than English. This was quickly validated when exploring the dataset.</p>
+<p>As the dataset did not contain a field for language, I had to use <a href="https://fasttext.cc/docs/en/language-identification.html">FastText’s Language Identification model</a> to predict the language of a document and use that information to filter out non-English reviews. The model was great for my use case as it was fast and accurate, having <a href="https://fasttext.cc/blog/2017/10/02/blog-post.html">achieved over 98% accuracy in EuroGov dataset which consists of many different European languages.</a></p>
+<p>Apart from the language, the same <code>reviews.csv</code> dataset was treated slightly differently for each approach. This will be briefly covered below.</p>
+<p>For each approach, I have used 211 reviews from the same Listing#2818 for comparison.</p>
+<h1 id="lets-discuss-approaches">Let’s discuss approaches</h1>
+<h2 id="1-topic-modelling">1. Topic Modelling</h2>
+<p>Topic modelling is an unsupervised machine learning method commonly used for discovering abstract topics within a collection of documents. It considers each document to be represented by a blend of topics and each topic to be represented by a set of words that frequently occur together.</p>
+<p>Topic modelling clusters words found within documents into<code>n</code> number of topics. Each cluster of words represents an abstract topic. For example, with a cluster of words <code>badminton, taekwondo, football</code> , we can determine that the associated abstract topic relates to <code>sports</code>.</p>
+<p>I will be using <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">Latent Dirichlet Allocation</a> (LDA), one of the most popular examples of topic modelling.</p>
+<p><strong><em>Implementation</em></strong></p>
+<ul>
+<li><em>Data preparation</em></li>
+</ul>
+<ol>
+<li>Symbols and stop words were removed</li>
+<li>Tokens were stemmed using Snowball Algorithm (improved from Porter)</li>
+<li>TF-IDF vectors created for each review using unigrams</li>
+</ol>
+<ul>
+<li>
+<p><em>Code</em></p>
+</li>
+<li>
+<p><em>Example output</em></p>
+</li>
+</ul>
+<pre><code>Topic #1:  
+\['&lt;host&gt;', 'provid', 'map', 'came', 'stay', 'amsterdam', 'travel', 'took', 'late', 'would'\]  
+  
+Topic #2:  
+\['&lt;host&gt;', 'everyth', 'good', 'kind', 'well', 'part', 'clean', 'comfort', 'also', 'guest'\]  
+  
+Topic #3:  
+\['&lt;host&gt;', 'host', 'stay', 'room', 'clean', 'place', 'great', 'help', 'amsterdam', 'map'\]  
+  
+Topic #4:  
+\['&lt;host&gt;', 'jouri', 'worthi', 'chang', 'session', 'vacat', 'overal', 'weed', 'scare', 'classi'\]  
+  
+Topic #5:  
+\['&lt;host&gt;', 'stay', 'get', 'room', 'host', 'amsterdam', 'provid', 'apart', 'also', 'come'\]
+</code></pre><p>Let’s break down the topics discovered:</p>
+<ol>
+<li>Topic #1 is fairly vague. It was difficult to interpret what it means. Was “late” mentioned in a negative light about the host? Or were guests talking about how the host waited for them because they were late? Or about how the host would respond to their late replies?</li>
+<li>Topic #2 suggests that the host is good and kind and the place was comfortable and clean.</li>
+<li>Topic #3 suggests that the host is a great help and the place again was great and clean.</li>
+<li>Topic #4 suggests that the guests enjoyed their journey.. maybe including the weed?</li>
+<li>Topic #5 again is fairly vague.</li>
+</ol>
+<ul>
+<li><em>Good and bad</em></li>
+</ul>
+<p><strong><em>The good</em></strong><em>:</em> topics are automatically discovered from the data itself without any labelled data required.</p>
+<p><strong><em>The bad:</em></strong> there is no right way in deciding the number of topics upfront unless you have prior knowledge. It takes a lot of trial and error. At its best, LDA can only provide a rough idea of topics that exist within the data. Interpreting a set of words to an abstract topic is a subjective guessing game.</p>
+<h2 id="2-tf-idf"><strong>2. TF-IDF</strong></h2>
+<p><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">TF-IDF</a> is short for <strong>T</strong>erm <strong>F</strong>requency-<strong>I</strong>nverse <strong>D</strong>ocument <strong>F</strong>requency. This scoring mechanism is commonly used in information retrieval and text mining for reflecting the relevance of words in a document.</p>
+<p>There are 2 parts to this score:</p>
+<ul>
+<li><strong>Term Frequency</strong> — Number of times word is found within a document</li>
+<li><strong>Inverse Document Frequency</strong> —The inverse number of times word is found in a collection of documents. The term <strong><em>inverse</em></strong> is important to note, as we are not interested in words that appear frequently across all documents.</li>
+</ul>
+<p>A word which appears frequently within a document but is not frequently found in the collection will have high TF-IDF score as this word is relevant to the document. For example, we can expect <code>sleep</code> in an article that discusses “Benefits of 8 hours of sleep” to have a high TF-IDF score as the word would be frequently mentioned in the article but might not be used as frequently in other articles.</p>
+<p>In contrast, words like <code>the, good, how</code> are common words which can be used in various articles. These words would have a low TF-IDF score.</p>
+<p>It is also worth mentioning that the same word in different documents will have a different TF-IDF score.</p>
+<p><strong><em>Implementation</em></strong></p>
+<ul>
+<li><em>Data preparation</em></li>
+</ul>
+<ol>
+<li>Symbols and stop words were removed</li>
+<li>Tokens were stemmed using Snowball Algorithm (improved from Porter)</li>
+<li>TF-IDF vectors created for each review using bigrams</li>
+</ol>
+<ul>
+<li>
+<p><em>Code</em></p>
+</li>
+<li>
+<p><em>Example output</em></p>
+</li>
+</ul>
+<pre><code>\['great host', 'perfect host', 'public transport', 'high recommend', 'place clean', 'get around', 'make sure', 'stay amsterdam', 'recommend stay', 'host place'\]
+</code></pre><p>The top 10 relevant keywords from all guest reviews indicate that the host is great, the place is clean and they highly recommend this place. There were also frequent mentions of public transportation.</p>
+<p>Compared to LDA, the keywords extracted from TF-IDF are less ambiguous. But there are still keywords like <code>make sure</code> and <code>get around</code> which are a little too vague to interpret.</p>
+<ul>
+<li><em>Good and bad</em></li>
+</ul>
+<p><strong><em>The good:</em></strong> relevant keywords were extracted using statistical methods. Simple to implement.</p>
+<p><strong><em>The bad:</em></strong> _s_emantic meanings of different words are not taken into consideration. Terms like <code>clean apartment</code> and <code>clean flat</code> semantically share the same meaning but in TF-IDF, these are treated as two different strings.</p>
+<h2 id="3-text-summarisation">3. Text Summarisation</h2>
+<p>Text Summarisation is used to find the most informative sentences in a document or collection of documents. Extractive Summarisation is the most popular approach which involves selecting sentences that most represent information in the document or collection of documents.</p>
+<p>A commonly used technique for Extractive Summarisation is a graph-based technique called TextRank Algorithm. This algorithm was built from <a href="https://en.wikipedia.org/wiki/PageRank">PageRank</a> (think Google!). Sentences are ranked by their importance based on the similarity of one sentence to another.</p>
+<p><strong><em>Implementation</em></strong></p>
+<ul>
+<li><em>Data preparation</em></li>
+</ul>
+<ol>
+<li>Symbols and stop words were removed.</li>
+<li>GloVe embeddings pre-trained on <a href="https://nlp.stanford.edu/projects/glove/">Wikipedia+Gigaword 5</a> for 100 dimensions were downloaded and extracted</li>
+<li>Similarity matrix built by applying GloVe embeddings to each sentence in review and calculating similarity between each sentence using cosine distance</li>
+<li>Applied TextRank Algorithm to get sentence rankings</li>
+</ol>
+<ul>
+<li>
+<p><em>Code</em></p>
+</li>
+<li>
+<p><em>Example output</em></p>
+</li>
+</ul>
+<pre><code>\['HOST: &lt;HOST&gt; was very accomodating, has prepared everything you will need for your stay in the city, you get to have great and fun conversations with him, you will be for sure well taken care of!','Not only was the room comfortable, colourful, light, quiet, and equipped with everything we could possibly need - and &lt;HOST&gt;'s flat spotless and beautifully furnished and in a great location - but &lt;HOST&gt; himself is the perfect host, spending the first hour of our arrival talking to us about Amsterdam, answering our many questions, showing us how to get around.','He was friendly, extremely helpful &amp; went the extra mile to make sure my friend and I were at home at his place.','His attention to details and kindness make his place an excellent alternative for those considering a bed and breakfast in Amsterdam\\r\\nI strongly advise to consider his place: Great location, an affordable price, a clean and organized room and a great host.','I traveled first time to Amsterdam with a friend and we stayed at &lt;HOST&gt;´s.He was an excelent host with helping to find out routes and gave lots of tips how to handle things in Amsterdam.The place was very clean and quiet.We recomment &lt;HOST&gt;´s room.'\]
+</code></pre><p>Immediately I see some resemblance between the top 5 most informative sentences and the top 10 relevant keywords from TF-IDF:</p>
+<ol>
+<li>Great host/ Perfect host</li>
+</ol>
+<pre><code>\- &lt;HOST&gt; was very accomodating, has prepared everything you will need for your stay in the city, you get to have great and fun conversations with him, you will be for sure well taken care of\- He was an excelent host with helping to find out routes and gave lots of tips how to handle things in Amsterdam\- His attention to details and kindness make his place an excellent alternative for those considering a bed and breakfast in Amsterdam\- He was friendly, extremely helpful &amp; went the extra mile to make sure my friend and I were at home at his place.
+</code></pre><p>2. Place clean</p>
+<pre><code>\- &lt;HOST&gt;'s flat spotless and beautifully furnished and in a great location\- a clean and organized room\- The place was very clean and quiet
+</code></pre><p>3. High recommend</p>
+<pre><code>\- We recomment &lt;HOST&gt;´s room.\- I strongly advise to consider his place
+</code></pre><ul>
+<li><em>Good and bad</em></li>
+</ul>
+<p><strong><em>The good:</em></strong> Approach being unsupervised means no labelled training data is required.</p>
+<h1 id="extraction-in-action-how-have-i-used-it-for-my-holiday">Extraction In Action (How have I used it for my holiday?)</h1>
+<p>Having tried all 3 approaches above, I have found the Text Summarisation approach to be most insightful, humanly readable and interpretable with the least amount of ambiguity.</p>
+<p>The below section will showcase how I have applied it on my recent trip planning to the beautiful Lisbon.</p>
+<p>After having short-listed 5 properties that I wanted to stay in, I’ve copied the URLs into my Jupyter Notebook for extraction.</p>
+<p>The workflow involved:</p>
+<ol>
+<li>extracting reviews submitted from the last 12 months for each listing</li>
+<li>performing the same text cleaning process as discussed above</li>
+<li>applying Text Summarisation using TextRank Algorithm as discussed above</li>
+<li>visualising the top 5 most informative sentences from each listing</li>
+</ol>
+<p><img src="https://miro.medium.com/max/1828/1*P71jGafBTSmC_tR16dMkLQ.jpeg" alt=""></p>
+<p>Top 5 most informative review sentences from Airbnb listings</p>
+<p><img src="https://miro.medium.com/max/1864/1*qbNy6JCuGmtTQfi4SNqTQA.jpeg" alt=""></p>
+<p>14 reviews written in the last 12 months for Listing#888141 with summarised text highlighted</p>
+<p>Voila! Without summarising the reviews, I would have had to read through 64 reviews for these 5 listings.</p>
+<p><strong><em>Hits:</em></strong> All 5 summaries covered main points of concern about the host, location, the cleanliness and comfort of the place. The summary for Listing#21042405, in particular, was insightful as it pointed out that keys had to be collected from a different location.</p>
+<p><strong><em>Misses:</em></strong> A guest from Listing#888141 complained about the place having no A/C and it was really hot during their visit. This comment was not picked up in the summarisation and the main reason could be because the guest was the only one who had made such a complaint hence it was not as significant when compared to other comments.</p>
+<h1 id="the-end">The End</h1>
+<p>Thanks for reading! I’ve enjoyed this wee project that combines 2 of my favourite things — travel and Data Science. Hopefully, you have enjoyed this read and found this application interesting and practical as well.</p>
+<p>Jupyter notebooks used can be found <a href="https://github.com/fifionachow/airbnb-reviews-analysis">here</a> on Github.</p>
+<p>Originally published in <a href="https://towardsdatascience.com/using-ml-for-holiday-planning-summarising-airbnb-reviews-193abb002232">Medium</a></p>
+<h1 id="references">References</h1>
+<p><a href="https://www.analyticsvidhya.com/blog/2018/11/introduction-text-summarization-textrank-python/">https://www.analyticsvidhya.com/blog/2018/11/introduction-text-summarization-textrank-python/</a></p>
+
+      </div>
+
+
+      <footer>
+        
+
+<section class="see-also">
+  
+    
+    
+    
+  
+</section>
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/startup.js" id="MathJax-script"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [
+          ['$', '$'], ['\\(', '\\)']
+        ],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+    
+      
+        © 2020
+      
+       Fiona Chow 
+    
+    
+       · 
+      Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+    
+
+  </body>
+
+</html>
