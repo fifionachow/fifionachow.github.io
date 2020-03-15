@@ -1,4 +1,5 @@
 baseURL = "https://fifionachow.github.io"
+publishDir = "docs"
 title = "Fiona Chow"
 
 languageCode = "en-uk"
